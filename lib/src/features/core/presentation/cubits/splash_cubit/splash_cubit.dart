@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../../../core/data/datasource/configuration/data_configuration.dart';
 import '../../../../../../core/data/datasource/storage/app_storage.dart';
+import '../../../../../../core/routing/app_router.dart';
 import '../user_cubit/user_cubit.dart';
 
 part 'splash_state.dart';
@@ -16,10 +17,13 @@ class SplashCubit extends Cubit<SplashState>    {
   Future<void> _loadSplash(BuildContext context)  async {
     emit(const SplashState.loading());
     AppStorage.instance.init();
+    if(   AppStorage.instance.readData(AppStorage.TOKEN)!=null)
+
     await  BlocProvider.of<UserCubit>(context).getProfile(context);
-    // await Future.delayed( const Duration(seconds: 5), () {
-    //   goRouter.pushReplacementNamed(AppRoute.navbar.name);
-    // });
+    else
+    await Future.delayed( const Duration(seconds:3), () {
+      goRouter.pushReplacementNamed(AppRoute.login.name);
+    });
 
   }
   Future<void> _initSplash(BuildContext context) async {
